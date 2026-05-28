@@ -482,8 +482,8 @@ function Report({osint,jung,form}) {
         <span>INTEL//PSYCH · Jungian Sales Intelligence</span>
         <span>CONFIDENTIAL · Internal Use Only</span>
       </div>
+      <ReportChat osint={osint} jung={jung} form={form} />
     </div>
-    <ReportChat osint={osint} jung={jung} form={form} />
   );
 }
 // ─── Chat ────────────────────────────────────────────────────────────────────
