@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');`;
 
@@ -481,6 +481,99 @@ function Report({osint,jung,form}) {
       <div style={{paddingTop:14,borderTop:"1px solid #1e1e2e",display:"flex",justifyContent:"space-between",fontFamily:"IBM Plex Mono,monospace",fontSize:9,color:"#2e2e42"}}>
         <span>INTEL//PSYCH · Jungian Sales Intelligence</span>
         <span>CONFIDENTIAL · Internal Use Only</span>
+      </div>
+    </div>
+    <ReportChat osint={osint} jung={jung} form={form} />
+  );
+}
+// ─── Chat ────────────────────────────────────────────────────────────────────
+function ReportChat({ osint, jung, form }) {
+  const [messages, setMessages] = useState([
+    { role: "assistant", content: `I have the full intel on ${osint.name || form.name}. Ask me anything about how to approach this call.` }
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const send = async () => {
+    const text = input.trim();
+    if (!text || loading) return;
+    const newMessages = [...messages, { role: "user", content: text }];
+    setMessages(newMessages);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const context = `You are a Jungian sales coach. You have this prospect profile:
+OSINT: ${JSON.stringify(osint)}
+JUNG: ${JSON.stringify(jung)}
+Answer sales questions about this specific prospect. Be direct, practical, and specific to their profile.`;
+
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          max_tokens: 500,
+          messages: [
+            { role: "user", content: context },
+            ...newMessages.map(m => ({ role: m.role, content: m.content })),
+          ],
+        }),
+      });
+      const data = await res.json();
+      const reply = data?.content?.[0]?.text || "Sorry, I couldn't generate a response.";
+      setMessages(prev => [...prev, { role: "assistant", content: reply }]);
+    } catch {
+      setMessages(prev => [...prev, { role: "assistant", content: "Something went wrong. Try again." }]);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ background: "#111118", border: "1px solid #1e1e2e", borderRadius: 12, overflow: "hidden", marginTop: 8 }}>
+      <div style={{ padding: "14px 18px", borderBottom: "1px solid #1e1e2e", display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#4caf7d" }} />
+        <span style={{ fontFamily: "IBM Plex Mono,monospace", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#c9a84c" }}>
+          Ask the AI Coach
+        </span>
+      </div>
+      <div style={{ height: 280, overflowY: "auto", padding: "16px 18px", display: "flex", flexDirection: "column", gap: 12 }}>
+        {messages.map((m, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+            <div style={{
+              maxWidth: "80%", padding: "10px 14px", borderRadius: 10, fontSize: 13, lineHeight: 1.6, fontWeight: 300,
+              background: m.role === "user" ? "rgba(201,168,76,0.12)" : "#16161f",
+              border: `1px solid ${m.role === "user" ? "rgba(201,168,76,0.25)" : "#1e1e2e"}`,
+              color: "#e8e6f0",
+            }}>
+              {m.content}
+            </div>
+          </div>
+        ))}
+        {loading && (
+          <div style={{ display: "flex", justifyContent: "flex-start" }}>
+            <div style={{ padding: "10px 14px", borderRadius: 10, background: "#16161f", border: "1px solid #1e1e2e", color: "#6b6880", fontSize: 13 }}>
+              Thinking…
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </div>
+      <div style={{ padding: "12px 16px", borderTop: "1px solid #1e1e2e", display: "flex", gap: 10 }}>
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && send()}
+          placeholder="e.g. How do I handle price objections with this prospect?"
+          style={{ flex: 1, background: "#0d0d14", border: "1px solid #1e1e2e", borderRadius: 8, padding: "10px 14px", color: "#e8e6f0", fontFamily: "DM Sans,sans-serif", fontSize: 13, outline: "none" }}
+        />
+        <button onClick={send} disabled={loading} style={{ background: "linear-gradient(135deg,#c9a84c,#a88038)", border: "none", borderRadius: 8, padding: "10px 18px", color: "#0a0a0f", fontFamily: "IBM Plex Mono,monospace", fontSize: 11, fontWeight: 500, cursor: "pointer", letterSpacing: "0.1em" }}>
+          Send
+        </button>
       </div>
     </div>
   );
