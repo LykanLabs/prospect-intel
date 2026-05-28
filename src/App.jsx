@@ -27,13 +27,27 @@ async function serperSearch(query) {
   const res = await fetch("/api/search", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ query, type: "search" }),
   });
   if (!res.ok) throw new Error(`Search failed: ${res.status}`);
   const data = await res.json();
   const results = (data.organic || []).map(r => `${r.title} — ${r.snippet} [${r.link}]`).join("\n");
   const kg = data.knowledgeGraph ? `Knowledge Graph: ${JSON.stringify(data.knowledgeGraph)}` : "";
   return [kg, results].filter(Boolean).join("\n") || "No results found.";
+}
+
+async function serperPlaces(query) {
+  const res = await fetch("/api/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query, type: "places" }),
+  });
+  if (!res.ok) throw new Error(`Places search failed: ${res.status}`);
+  const data = await res.json();
+  const places = (data.places || []).map(p =>
+    `Name: ${p.title} | Rating: ${p.rating} | Reviews: ${p.ratingCount} | Address: ${p.address} | Phone: ${p.phoneNumber || "unknown"} | Hours: ${p.hours || "unknown"} | Website: ${p.website || "unknown"} | Category: ${p.category || "unknown"}`
+  ).join("\n");
+  return places || "No places found.";
 }
 
 async function callClaude(messages) {
@@ -493,7 +507,7 @@ export default function App() {
     try {
       setStepLabel("Running Google searches…");
       const [gmb,facebook,instagram,yelp,reviews,owner] = await Promise.all([
-        serperSearch(`${business} ${city} Google Maps`),
+        serperPlaces(`${business} ${city}`),
         serperSearch(`${business} ${city} facebook`),
         serperSearch(`${business} ${city} instagram`),
         serperSearch(`${business} ${city} yelp`),
