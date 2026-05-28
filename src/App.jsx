@@ -508,10 +508,10 @@ function ReportChat({ osint, jung, form }) {
     setLoading(true);
 
     try {
-      const context = `You are a Jungian sales coach. You have this prospect profile:
+      const context = `You are a Jungian sales coach helping a salesperson prepare for a call. You have the full profile of their prospect:
 OSINT: ${JSON.stringify(osint)}
 JUNG: ${JSON.stringify(jung)}
-Answer sales questions about this specific prospect. Be direct, practical, and specific to their profile.`;
+Answer questions conversationally, like a coach talking to a salesperson right before a call. No bullet points, no bold text, no markdown. Just clear, direct, practical advice in plain sentences. Keep answers under 4 sentences unless more detail is truly needed. Always tie your advice back to this specific prospect's personality and data.`;
 
       const res = await fetch("/api/analyze", {
         method: "POST",
