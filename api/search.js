@@ -6,8 +6,13 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const { query } = req.body;
-    const response = await fetch("https://google.serper.dev/search", {
+    const { query, type } = req.body;
+
+    const endpoint = type === "places"
+      ? "https://google.serper.dev/places"
+      : "https://google.serper.dev/search";
+
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,6 +20,8 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({ q: query, num: 5 }),
     });
+
+    if (!response.ok) throw new Error(`Serper error ${response.status}`);
     const data = await response.json();
     res.status(200).json(data);
   } catch (err) {
