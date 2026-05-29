@@ -54,7 +54,7 @@ async function callClaude(messages) {
   const res = await fetch("/api/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages, max_tokens: 2000 }),
+    body: JSON.stringify({ messages, max_tokens: 4000 }),
   });
   if (!res.ok) throw new Error(`Analysis failed: ${res.status}`);
   const data = await res.json();
