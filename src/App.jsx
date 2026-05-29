@@ -20,6 +20,11 @@ ${FONTS}
 .fu5 { animation: fadeUp 0.45s 0.40s ease both; }
 .fu6 { animation: fadeUp 0.45s 0.48s ease both; }
 .fu7 { animation: fadeUp 0.45s 0.56s ease both; }
+@media print {
+  body { background: #0a0a0f !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .no-print { display: none !important; }
+  .fu, .fu1, .fu2, .fu3, .fu4, .fu5, .fu6, .fu7 { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
 `;
 
 // ─── API helpers (calls our own Vercel backend) ───────────────────────────────
@@ -801,7 +806,16 @@ export default function App() {
             <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:11,letterSpacing:"0.2em",color:"#6b6880",textTransform:"uppercase"}}>
               INTEL<span style={{color:"#c9a84c"}}>//</span>PSYCH
             </div>
-            {phase==="done"&&<button onClick={reset} style={{fontFamily:"IBM Plex Mono,monospace",fontSize:10,letterSpacing:"0.13em",textTransform:"uppercase",color:"#6b6880",background:"none",border:"1px solid #1e1e2e",borderRadius:6,padding:"6px 13px",cursor:"pointer"}}>← New Prospect</button>}
+            {phase==="done"&&(
+            <div style={{display:"flex",gap:10}}>
+              <button onClick={()=>window.print()} style={{fontFamily:"IBM Plex Mono,monospace",fontSize:10,letterSpacing:"0.13em",textTransform:"uppercase",color:"#0a0a0f",background:"linear-gradient(135deg,#c9a84c,#a88038)",border:"none",borderRadius:6,padding:"6px 13px",cursor:"pointer"}} className="no-print">
+                ↓ Download PDF
+              </button>
+              <button onClick={reset} style={{fontFamily:"IBM Plex Mono,monospace",fontSize:10,letterSpacing:"0.13em",textTransform:"uppercase",color:"#6b6880",background:"none",border:"1px solid #1e1e2e",borderRadius:6,padding:"6px 13px",cursor:"pointer"}} className="no-print">
+                ← New Prospect
+              </button>
+            </div>
+          )}
           </div>
 
           {phase==="idle"&&(
