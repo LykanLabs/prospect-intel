@@ -463,6 +463,88 @@ function Report({osint,jung,form}) {
         </div>
       </div>
 
+      {/* Isaac Approach Script */}
+      <div className="fu3">
+        <SecTitle>Isaac Approach Script</SecTitle>
+        <div style={{display:"flex",flexDirection:"column",gap:12}}>
+
+          {/* Profile + Archetype */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+            <Card style={{borderColor:"rgba(201,168,76,0.3)"}}>
+              <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#c9a84c",marginBottom:10}}>🎯 Customer Profile</div>
+              <div style={{fontFamily:"Playfair Display,serif",fontSize:20,color:"#c9a84c",marginBottom:6}}>Profile {jung.customer_profile}</div>
+              <div style={{fontSize:12,color:"#6b6880",lineHeight:1.6,fontWeight:300}}>{jung.customer_profile_reason}</div>
+            </Card>
+            <Card style={{borderColor:"rgba(123,108,216,0.3)"}}>
+              <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#7b6cd8",marginBottom:10}}>🎭 Lead Archetype</div>
+              <div style={{fontFamily:"Playfair Display,serif",fontSize:20,color:"#7b6cd8",marginBottom:6}}>{jung.lead_archetype}</div>
+              <div style={{fontSize:12,color:"#6b6880",lineHeight:1.6,fontWeight:300}}>{jung.lead_archetype_reason}</div>
+            </Card>
+          </div>
+
+          {/* Revelation Moment */}
+          {jung.revelation_moment&&(
+            <Card style={{background:"rgba(224,92,92,0.05)",borderColor:"rgba(224,92,92,0.25)"}}>
+              <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#e05c5c",marginBottom:10}}>💥 Revelation Moment — Lead With This</div>
+              <div style={{fontSize:13,color:"#e8e6f0",lineHeight:1.7,fontWeight:300}}>{jung.revelation_moment}</div>
+            </Card>
+          )}
+
+          {/* Diagnostic Questions */}
+          {jung.diagnostic_questions?.length>0&&(
+            <Card>
+              <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#6b6880",marginBottom:13}}>🔍 Diagnostic Questions — Say These Exactly</div>
+              <div style={{display:"flex",flexDirection:"column",gap:10}}>
+                {jung.diagnostic_questions.map((q,i)=>(
+                  <div key={i} style={{display:"flex",gap:12,alignItems:"flex-start"}}>
+                    <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:11,color:"#c9a84c",flexShrink:0,marginTop:1}}>{i+1}.</div>
+                    <div style={{fontFamily:"Playfair Display,serif",fontSize:14,fontStyle:"italic",color:"#e8e6f0",lineHeight:1.6}}>"{q}"</div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {/* Isaac Phrases */}
+          {jung.isaac_phrases_to_deploy?.length>0&&(
+            <Card>
+              <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#6b6880",marginBottom:13}}>🗣️ Isaac Phrases to Deploy</div>
+              <div style={{display:"flex",flexDirection:"column",gap:14}}>
+                {jung.isaac_phrases_to_deploy.map((p,i)=>(
+                  <div key={i} style={{paddingLeft:12,borderLeft:"2px solid #c9a84c"}}>
+                    <div style={{fontSize:13,color:"#e8e6f0",lineHeight:1.6,fontWeight:300}}>{p}</div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {/* Pre-emption + WhatsApp + Close Signal */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+            {jung.pre_emption_strategy&&(
+              <Card>
+                <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#4caf7d",marginBottom:10}}>🛡️ Pre-emption Strategy</div>
+                <div style={{fontSize:13,color:"#e8e6f0",lineHeight:1.7,fontWeight:300}}>{jung.pre_emption_strategy}</div>
+              </Card>
+            )}
+            <div style={{display:"flex",flexDirection:"column",gap:12}}>
+              {jung.whatsapp_moment&&(
+                <Card>
+                  <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#4caf7d",marginBottom:8}}>📱 WhatsApp Moment</div>
+                  <div style={{fontSize:13,color:"#e8e6f0",lineHeight:1.6,fontWeight:300}}>{jung.whatsapp_moment}</div>
+                </Card>
+              )}
+              {jung.close_signal&&(
+                <Card>
+                  <div style={{fontFamily:"IBM Plex Mono,monospace",fontSize:9,textTransform:"uppercase",letterSpacing:"0.13em",color:"#c9a84c",marginBottom:8}}>🔒 Close Signal</div>
+                  <div style={{fontSize:13,color:"#e8e6f0",lineHeight:1.6,fontWeight:300}}>{jung.close_signal}</div>
+                </Card>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </div>
       {jung.opening_line&&(
         <div className="fu3" style={{background:"rgba(201,168,76,0.06)",border:"1px solid rgba(201,168,76,0.18)",borderRadius:10,padding:"14px 18px",display:"flex",gap:12,alignItems:"flex-start"}}>
           <span style={{fontSize:18,flexShrink:0}}>💬</span>
