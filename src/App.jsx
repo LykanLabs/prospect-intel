@@ -755,7 +755,7 @@ export default function App() {
 
   const run = async () => {
     const name=form.name.trim(), business=form.business.trim(), city=form.city.trim();
-    if (!name||!business||!city) { setError("Owner name, business name and city are required."); return; }
+    if (!name) { setError("Owner name is required."); return; }
     setError(""); setOsint(null); setJung(null); setPhase("running"); setStepsComplete(1);
 
     try {
@@ -832,13 +832,13 @@ export default function App() {
                       onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
                   </div>
                   <div>
-                    <Label>Business Name *</Label>
+                   <Label>Business Name (optional)</Label>
                     <input style={inp} placeholder="e.g. Tacos El Rey" value={form.business} onChange={set("business")}
                       onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
                   </div>
                 </div>
                 <div>
-                  <Label>City *</Label>
+                  <Label>City (optional)</Label>
                   <input style={inp} placeholder="e.g. Barranquilla, Colombia" value={form.city} onChange={set("city")}
                     onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
                 </div>
