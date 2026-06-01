@@ -777,7 +777,7 @@ export default function App() {
 
       setStepLabel("OSINT Agent structuring footprint…");
       const o = await callClaude([{role:"user", content:buildOsintPrompt(
-        {name,business,city,email:clean(form.email),phone:clean(form.phone),doordash:form.doordash,ubereats:form.ubereats,facebook:form.facebook,tiktok:form.tiktok}
+        {name,business,city,email:clean(form.email),phone:clean(form.phone),doordash:form.doordash,ubereats:form.ubereats,facebook:form.facebook,tiktok:form.tiktok},
         {gmb,facebook,instagram,yelp,reviews,owner}
       )}]);
       setOsint(o); setStepsComplete(3);
