@@ -92,6 +92,11 @@ Business: ${form.business}
 City: ${form.city}
 Email: ${form.email||"not provided"}
 Phone: ${form.phone||"not provided"}
+DoorDash URL: ${form.doordash||"not provided"}
+Uber Eats URL: ${form.ubereats||"not provided"}
+Facebook Profile: ${form.facebook||"not provided"}
+TikTok Profile: ${form.tiktok||"not provided"}
+Phone: ${form.phone||"not provided"}
 
 REAL SEARCH RESULTS:
 --- GMB / Google Maps ---
@@ -742,7 +747,7 @@ Answer questions conversationally, like a coach talking to a salesperson right b
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [form, setForm] = useState({name:"",business:"",city:"",email:"",phone:""});
+  const [form, setForm] = useState({name:"",business:"",city:"",email:"",phone:"",doordash:"",ubereats:"",facebook:"",tiktok:""});
   const [phase, setPhase] = useState("idle");
   const [stepsComplete, setStepsComplete] = useState(0);
   const [stepLabel, setStepLabel] = useState("");
@@ -772,7 +777,7 @@ export default function App() {
 
       setStepLabel("OSINT Agent structuring footprint…");
       const o = await callClaude([{role:"user", content:buildOsintPrompt(
-        {name,business,city,email:clean(form.email),phone:clean(form.phone)},
+        {name,business,city,email:clean(form.email),phone:clean(form.phone),doordash:form.doordash,ubereats:form.ubereats,facebook:form.facebook,tiktok:form.tiktok}
         {gmb,facebook,instagram,yelp,reviews,owner}
       )}]);
       setOsint(o); setStepsComplete(3);
@@ -851,6 +856,30 @@ export default function App() {
                   <div>
                     <Label>Phone (optional)</Label>
                     <input style={inp} placeholder="6825517404" value={form.phone} onChange={set("phone")}
+                      onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
+                  </div>
+                </div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+                  <div>
+                    <Label>DoorDash Link (optional)</Label>
+                    <input style={inp} placeholder="doordash.com/store/..." value={form.doordash} onChange={set("doordash")}
+                      onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
+                  </div>
+                  <div>
+                    <Label>Uber Eats Link (optional)</Label>
+                    <input style={inp} placeholder="ubereats.com/store/..." value={form.ubereats} onChange={set("ubereats")}
+                      onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
+                  </div>
+                </div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+                  <div>
+                    <Label>Facebook Profile (optional)</Label>
+                    <input style={inp} placeholder="facebook.com/..." value={form.facebook} onChange={set("facebook")}
+                      onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
+                  </div>
+                  <div>
+                    <Label>TikTok Profile (optional)</Label>
+                    <input style={inp} placeholder="tiktok.com/@..." value={form.tiktok} onChange={set("tiktok")}
                       onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
                   </div>
                 </div>
