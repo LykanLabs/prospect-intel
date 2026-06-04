@@ -95,6 +95,7 @@ Phone: ${form.phone||"not provided"}
 DoorDash URL: ${form.doordash||"not provided"}
 Uber Eats URL: ${form.ubereats||"not provided"}
 Facebook Profile: ${form.facebook||"not provided"}
+Instagram URL: ${form.instagram_url||"not provided"}
 TikTok Profile: ${form.tiktok||"not provided"}
 Phone: ${form.phone||"not provided"}
 
@@ -747,7 +748,7 @@ Answer questions conversationally, like a coach talking to a salesperson right b
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [form, setForm] = useState({name:"",business:"",city:"",email:"",phone:"",doordash:"",ubereats:"",facebook:"",tiktok:""});
+  const [form, setForm] = useState({name:"",business:"",city:"",email:"",phone:"",doordash:"",ubereats:"",facebook:"",instagram_url:"",tiktok:""});
   const [phase, setPhase] = useState("idle");
   const [stepsComplete, setStepsComplete] = useState(0);
   const [stepLabel, setStepLabel] = useState("");
@@ -777,7 +778,7 @@ export default function App() {
 
       setStepLabel("OSINT Agent structuring footprint…");
       const o = await callClaude([{role:"user", content:buildOsintPrompt(
-        {name,business,city,email:clean(form.email),phone:clean(form.phone),doordash:form.doordash,ubereats:form.ubereats,facebook:form.facebook,tiktok:form.tiktok},
+        {name,business,city,email:clean(form.email),phone:clean(form.phone),doordash:form.doordash,ubereats:form.ubereats,facebook:form.facebook,instagram_url:form.instagram_url,tiktok:form.tiktok},
         {gmb,facebook,instagram,yelp,reviews,owner}
       )}]);
       setOsint(o); setStepsComplete(3);
@@ -875,6 +876,11 @@ export default function App() {
                   <div>
                     <Label>Facebook Profile (optional)</Label>
                     <input style={inp} placeholder="facebook.com/..." value={form.facebook} onChange={set("facebook")}
+                      onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
+                  </div>
+                  <div>
+                    <Label>Instagram Profile (optional)</Label>
+                    <input style={inp} placeholder="instagram.com/..." value={form.instagram_url} onChange={set("instagram_url")}
                       onFocus={e=>e.target.style.borderColor="#c9a84c"} onBlur={e=>e.target.style.borderColor="#1e1e2e"}/>
                   </div>
                   <div>
